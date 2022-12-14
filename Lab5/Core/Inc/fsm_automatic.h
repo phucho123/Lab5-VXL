@@ -1,0 +1,29 @@
+/*
+ * fsm_automatic.h
+ *
+ *  Created on: Dec 14, 2022
+ *      Author: ADMIN
+ */
+
+#ifndef INC_FSM_AUTOMATIC_H_
+#define INC_FSM_AUTOMATIC_H_
+#include "timer.h"
+
+#define INIT	0
+#define START	1
+#define R		2
+#define S		3
+#define T		4
+#define O		5
+#define K		6
+
+extern int state1;
+extern int state2;
+extern int flag_uart;
+
+
+void command_parser_fsm(int temp);
+void uart_communication_fsm ();
+
+
+#endif /* INC_FSM_AUTOMATIC_H_ */

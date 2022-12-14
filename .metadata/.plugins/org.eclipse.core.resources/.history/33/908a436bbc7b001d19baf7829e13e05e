@@ -1,0 +1,82 @@
+/*
+ * fsm_automatic.c
+ *
+ *  Created on: Dec 14, 2022
+ *      Author: ADMIN
+ */
+#include "fsm_automatic.h"
+
+
+uint32_t ADC_value = 0;
+int temp = 0;
+
+void command_parser_fsm(){
+	HAL_UART_Transmit(&huart2, &temp, 1, 50);
+	switch(state1){
+		case INIT:
+			if(temp == '!') state1 = START;
+			break;
+		case START: //!
+			if(temp == 'R') state1 = R;
+			else if(temp == 'O') state1 = O;
+			else state1 = INIT;
+			break;
+		case R:
+			if(temp == 'S') state1 = S;
+			else if(temp == '!') state1 = START;
+			else state1 = INIT;
+			break;
+		case S:
+			if(temp == 'T') state1 = T;
+			else if(temp == '!') state1 = START;
+			else state1 = INIT;
+			break;
+		case T:
+			if(temp == '#'){
+				state2 = 1;
+				state1 = INIT;
+			}
+			else if(temp == '!'){
+				state1 = START;
+			}
+			else state1 = INIT;
+			break;
+		case O:
+			if(temp == 'K') state1 = K;
+			else if(temp == '!') state1 = START;
+			else state1 = INIT;
+			break;
+		case K:
+			if(temp == '#'){
+				state2 = 0;
+				state1 = INIT;
+			}
+			else if(temp == '!') state1 = START;
+			else state1 = INIT;
+			break;
+		default:
+			break;
+	}
+}
+
+void uart_communication_fsm (){
+	switch(state2){
+		case 0:
+			//do nothing
+			break;
+		case 1:
+			if(timer_flag1){
+				setTimer1(3000);
+					  ADC_value =  HAL_ADC_GetValue(&hadc1);
+				HAL_UART_Transmit (& huart2 , (void *) str , sprintf ( str , "!ADC=%ld#\r\n", ADC_value ) , 3000);
+			}
+			break;
+		default:
+			break;
+	}
+}
+
+
+
+
+

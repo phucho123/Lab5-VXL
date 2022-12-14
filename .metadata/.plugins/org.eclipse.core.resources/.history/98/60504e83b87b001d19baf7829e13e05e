@@ -1,0 +1,16 @@
+/*
+ * timer.h
+ *
+ *  Created on: Dec 14, 2022
+ *      Author: ADMIN
+ */
+
+#ifndef INC_TIMER_H_
+#define INC_TIMER_H_
+
+#define TICK 10
+
+void setTimer(int duration);
+void
+
+#endif /* INC_TIMER_H_ */

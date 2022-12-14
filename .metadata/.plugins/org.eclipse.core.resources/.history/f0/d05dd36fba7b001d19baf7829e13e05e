@@ -1,0 +1,58 @@
+/*
+ * fsm_automatic.c
+ *
+ *  Created on: Dec 14, 2022
+ *      Author: ADMIN
+ */
+
+
+void command_parser_fsm(){
+	HAL_UART_Transmit(&huart2, &temp, 1, 50);
+	switch(state1){
+		case INIT:
+			if(temp == '!') state1 = START;
+			break;
+		case START: //!
+			if(temp == 'R') state1 = R;
+			else if(temp == 'O') state1 = O;
+			else state1 = INIT;
+			break;
+		case R:
+			if(temp == 'S') state1 = S;
+			else if(temp == '!') state1 = START;
+			else state1 = INIT;
+			break;
+		case S:
+			if(temp == 'T') state1 = T;
+			break;
+		case T:
+			state2 = 1;
+			state1 = INIT;
+			break;
+		case O:
+			if(temp == 'K') state1 = S;
+			break;
+		case K:
+			break;
+		default:
+			break;
+	}
+}
+
+void uart_communication_fsm (){
+	switch(state2){
+	case 0:
+		HAL_UART_Transmit(&huart2, &temp, 1, 50);
+		break;
+	case 1:
+		HAL_UART_Transmit(&huart2, &temp, 1, 50);
+		break;
+	default:
+		break;
+	}
+}
+
+
+
+
+
